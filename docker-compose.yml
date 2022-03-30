@@ -1,0 +1,34 @@
+
+version: '3'
+services:
+  web:
+    build:
+      context: _docker
+      dockerfile: php.Dockerfile
+    container_name: php-xdebug
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+      - /var/www/html/log/apache2/salic:/var/log/apache2
+    environment:
+      - APPLICATION_ENV=development
+      #xDebug configs for 'development' environment
+      - XDEBUG_INSTALL="true"
+      - XDEBUG_CONFIG="remote_host=localhost"
+      - XDEBUG_REMOTE_ENABLE=on
+      - XDEBUG_REMOTE_AUTOSTART=on
+      - XDEBUG_REMOTE_CONNECT_BACK=1
+      - XDEBUG_REMOTE_HANDLER=dbgp
+      - XDEBUG_PROFILER_ENABLE=1
+      - XDEBUG_PROFILER_OUTPUT_DIR=/tmp/www/html
+      - XDEBUG_REMOTE_PORT=9000
+      - XDEBUGINI_PATH=/usr/local/etc/php/conf.d/xdebug.ini
+      - PHP_IDE_CONFIG="serverName=Test"
+      - XDEBUG_DEFAULT_ENABLE=1
+      - XDEBUG_IDEKEY=PHPSTORM
+      - PHP_EXTENSIONS=bcmath bz2 calendar exif gd gettext intl mysqli pcntl pdo_mysql soap sockets sysvmsg sysvsem sysvshm opcache zip xsl sodium xdebug
+    restart: always
+    tty: true
+    stdin_open: true
+
